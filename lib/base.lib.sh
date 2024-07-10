@@ -7,12 +7,13 @@ SUPP_BASE_LIB_SH="loaded"
 
 [ -n "${PRODUCTION_ENVIRONMENT}" ] || PRODUCTION_ENVIRONMENT="production"
 
-SUPP_DIR=$(dirname "$(realpath -s "$(dirname "${BASH_SOURCE[0]}")")")
-APP_DIR=$(dirname "${SUPP_DIR}")
-START_DIR=$(pwd)
+SUPP_BASE_LIB_DIR="$(realpath -s "$(dirname "${BASH_SOURCE[0]}")")"
+SUPP_BASE_DIR="$(dirname "${SUPP_BASE_LIB_DIR}")"
+SUPP_DIR="$(dirname "${SUPP_BASE_DIR}")"
+APP_DIR="$(dirname "$(dirname "${_bootstrap}")")"
+START_DIR="$(pwd)"
 
 SAIL_BIN="${APP_DIR}/sail/sail"
-
 
 function supError() {
   local msgPrefix="support-lib"

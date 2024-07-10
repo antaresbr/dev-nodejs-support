@@ -16,6 +16,12 @@ LABEL devcontainer.metadata="[{ \"remoteUser\": \"${NODEJS_USERNAME}\" }]"
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+RUN apt-get update \
+    && apt-get install -y supervisor \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 RUN npm install -g npm@latest pm2
 
 #-- senha: sail
@@ -31,8 +37,11 @@ COPY lib/skel /tmp/skel
 RUN cat /tmp/skel/custom-rc | sed "s/{{USERNAME}}/${NODEJS_USERNAME}/g" | bash
 
 COPY lib/entrypoint-loop /usr/local/bin/
-RUN chmod 755 /usr/local/bin/entrypoint-loop
+COPY nodejs/start-container.sh /usr/local/bin/
+COPY nodejs/supervisord.conf /etc/supervisor/conf.d/
 
-ENTRYPOINT ["/usr/local/bin/entrypoint-loop"]
+RUN chmod 755 /usr/local/bin/entrypoint-loop /usr/local/bin/start-container.sh
+
+ENTRYPOINT ["/usr/local/bin/start-container.sh"]
 
 WORKDIR /home/${NODEJS_USERNAME}/app

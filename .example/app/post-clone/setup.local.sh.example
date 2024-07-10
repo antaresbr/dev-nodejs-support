@@ -10,23 +10,81 @@ echo "---| post-clone/$(basename "${BASH_SOURCE[0]}")"
 
 #---[ setup-local ]---
 
-SAIL_USERID="$(id -u)"
-if [ "${SAIL_USERID}" == "1000" ]
+function localSailSetup() {
+  echo "local sail setup"
+}
+
+#-- parameters
+
+pclLoadSavedParams
+
+echo ""
+
+[ -n "${pSailProject}" ] || envVarRead "Sail project" "pSailProject" "required|lower-case" ""
+[ -n "${pSailSubproject}" ] || envVarRead "Sail subproject" "pSailSubproject" "default:$(basename "$(realpath "${BASE_DIR}")")|required|lower-case" ""
+
+[ -n "${pNodejsVersion}" ] || envVarRead "NODEJS version" "pNodejsVersion" "default:22|required" ""
+[ -n "${pNodejsCodename}" ] || envVarRead "NODEJS codename" "pNodejsCodename" "default:bookworm|required|lower-case" ""
+[ -n "${pNodejsPort}" ] || envVarRead "NODEJS port" "pNodejsPort" "default:7100|required" ""
+[ -n "${pNodejsUserName}" ] || envVarRead "NODEJS user name" "pNodejsUserName" "default:node|required" ""
+[ -n "${pNodejsUserId}" ] || envVarRead "NODEJS user name" "pNodejsUserId" "default:$(id -u)|required" ""
+
+echo ""
+echo "---[ parameters ]---"
+echo ""
+echo "ENVIRONMENT : ${pEnvironment}"
+echo ""
+echo "pSailProject         : ${pSailProject}"
+echo "pSailSubproject      : ${pSailSubproject}"
+echo ""
+echo "pNodejsVersion       : ${pNodejsVersion}"
+echo "pNodejsCodename      : ${pNodejsCodename}"
+echo "pNodejsVersion       : ${pNodejsVersion}"
+echo "pNodejsPort          : ${pNodejsPort}"
+echo "pNodejsUserName      : ${pNodejsUserName}"
+echo "pNodejsUserId        : ${pNodejsUserId}"
+echo ""
+
+[ -n "${pConfirm}" ] || envVarRead "Confirm parameters?" "pConfirm" "default:yes|lower-case|hide-values" "y|yes|n|no"
+[ "${pConfirm:0:1}" == "y" ] || exit 0
+
+if [ ! -f "${SCRIPT_DIR}/setup.local.env" ]
 then
-  SAIL_USERNAME="node"
-else
-  SAIL_USERNAME="sail"
+  echo""
+  envVarRead "Save post-clone params?" "pSavePostcloneParams" "default:yes|lower-case|hide-values" "y|yes|n|no"
+  if [ "${pConfirm:0:1}" == "y" ]
+  then
+    echo "\
+#!/bin/bash
+pSailProject=\"${pSailProject}\"
+pSailSubproject=\"${pSailSubproject}\"
+pNodejsVersion=\"${pNodejsVersion}\"
+pNodejsCodename=\"${pNodejsCodename}\"
+pNodejsPort=\"${pNodejsPort}\"
+pNodejsUserName=\"${pNodejsUserName}\"
+pNodejsUserId=\"${pNodejsUserId}\"
+" > "${SCRIPT_DIR}/setup.local.env"
+  fi
 fi
+
+WS_TEMPLATE_FILE_VARS="\
+SAIL_PROJECT=${pSailProject}
+SAIL_SUBPROJECT=${pSailSubproject}
+NODEJS_VERSION=${pNodejsVersion}
+NODEJS_CODENAME=${pNodejsCodename}
+NODEJS_PORT=${pNodejsPort}
+NODEJS_USERNAME=${pNodejsUserName}
+NODEJS_USERID=${pNodejsUserId}
+"
 
 #-- sail
 
 sailSetup
 
-#-- template
+#-- files
 
 wsTemplateFile "src/BUILD-INFO.json" "src/.example/BUILD-INFO.json.example"
 wsTemplateFile "src/ENVIRONMENT.json" "src/.example/ENVIRONMENT.json.example"
-wsTemplateFile "src/environments/env.ts" "src/environments/.example/env.ts.example"
 
 #-- build
 

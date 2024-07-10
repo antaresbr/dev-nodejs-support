@@ -3,7 +3,7 @@ services:
     nodejs:
         build:
             context: ./
-            dockerfile: nodejs-${NODEJS_VERSION}/Dockerfile
+            dockerfile: nodejs/Dockerfile
             args:
                 NODEJS_USERNAME: ${NODEJS_USERNAME}
                 NODEJS_USERID: ${NODEJS_USERID}
