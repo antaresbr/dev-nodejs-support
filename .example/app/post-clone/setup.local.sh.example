@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo ""
+echo "---[ $(dirname "$(realpath "${SCRIPT_DIR}")") ]---"
+echo "---| post-clone/$(basename "${BASH_SOURCE[0]}")"
+
+[ -z "${WORKSPACE_BASE_LIB_SH}" ] && echo -e "post-clone/setup-local | ERROR | WORKSPACE_BASE_LIB_SH not defined" && exit 1
+[ -z "${POST_CLONE_SETUP_LIB_SH}" ] && wsError "post-clone/setup-local" "POST_CLONE_SETUP_LIB_SH not defined"
+[ -z "${POST_CLONE_LIB_SH}" ] && wsError "post-clone/setup-local" "POST_CLONE_LIB_SH not defined"
+
+#---[ setup-local ]---
+
+SAIL_USERID="$(id -u)"
+if [ "${SAIL_USERID}" == "1000" ]
+then
+  SAIL_USERNAME="node"
+else
+  SAIL_USERNAME="sail"
+fi
+
+#-- sail
+
+sailSetup
+
+#-- template
+
+wsTemplateFile "src/BUILD-INFO.json" "src/.example/BUILD-INFO.json.example"
+wsTemplateFile "src/ENVIRONMENT.json" "src/.example/ENVIRONMENT.json.example"
+wsTemplateFile "src/environments/env.ts" "src/environments/.example/env.ts.example"
+
+#-- build
+
+sailBuild

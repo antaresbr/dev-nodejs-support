@@ -1,0 +1,32 @@
+#!/bin/bash
+
+apply() {
+  zPath="$1"
+
+  if [ ! -d "${zPath}" ]
+  then
+    echo "directoey does not exists, ${zPath}"
+  else
+    if [ ! -w "${zPath}" ]
+    then
+      echo "can't write in ${zPath}"
+    else
+      cd "${zPath}"
+      echo "applying in ${zPath}"
+
+      fgrep '~/.bash_aliases' .bashrc &> /dev/null || cat /tmp/skel/bashrc_aliases >> .bashrc 
+      fgrep '~/.bash_paths' .bashrc &> /dev/null || cat /tmp/skel/bashrc_paths >> .bashrc
+      cat /tmp/skel/bash_aliases >> .bash_aliases
+      cat /tmp/skel/bash_paths >> .bash_paths
+      cat /tmp/skel/screenrc >> .screenrc
+      cat /tmp/skel/vimrc >> .vimrc
+      chmod 644 .bashrc .bash_aliases .bash_paths .screenrc .vimrc
+    fi
+  fi
+}
+
+apply "/etc/skel"
+apply "/root"
+apply "/home/{{USERNAME}}"
+
+rm -rf /tmp/skel

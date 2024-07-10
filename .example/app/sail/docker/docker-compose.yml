@@ -1,0 +1,35 @@
+services:
+
+    nodejs:
+        build:
+            context: ./
+            dockerfile: nodejs-${NODEJS_VERSION}/Dockerfile
+            args:
+                NODEJS_USERNAME: ${NODEJS_USERNAME}
+                NODEJS_USERID: ${NODEJS_USERID}
+                NODEJS_VERSION: ${NODEJS_VERSION}
+                NODEJS_CODENAME: ${NODEJS_CODENAME}
+                NODEJS_PORT: ${NODEJS_PORT}
+        image: ${COMPOSE_PROJECT_NAME}/nodejs
+        container_name: ${SAIL_SERVICE_NODEJS}
+        extra_hosts:
+            - host.docker.internal:host-gateway
+            - gateway.docker.internal:host-gateway
+        ports:
+            - ${NODEJS_PORT}:8080
+        environment:
+            SAIL_ENV: ${SAIL_ENV}
+            SERVER_ENVIRONMENT: ${SERVER_ENVIRONMENT}
+        volumes:
+            - ../../:/home/${NODEJS_USERNAME}/app
+        networks:
+            - sail-project-net
+            - sail-net
+
+networks:
+    sail-project-net:
+        driver: bridge
+        name: ${COMPOSE_PROJECT_NAME}
+
+    sail-net:
+        external: true
