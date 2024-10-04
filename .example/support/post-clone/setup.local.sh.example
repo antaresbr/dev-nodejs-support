@@ -12,7 +12,7 @@ echo "---| post-clone/$(basename "${BASH_SOURCE[0]}")"
 
 #-- parameters
 
-pclLoadSavedParams
+pclLoadDefaultAndSavedParams
 
 if [ -z "${pNodejsService}" ]
 then

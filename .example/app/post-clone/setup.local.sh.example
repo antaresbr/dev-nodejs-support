@@ -16,18 +16,18 @@ function localSailSetup() {
 
 #-- parameters
 
-pclLoadSavedParams
+pclLoadDefaultAndSavedParams
 
 echo ""
 
-[ -n "${pSailProject}" ] || envVarRead "Sail project" "pSailProject" "required|lower-case" ""
-[ -n "${pSailSubproject}" ] || envVarRead "Sail subproject" "pSailSubproject" "default:$(basename "$(realpath "${BASE_DIR}")")|required|lower-case" ""
+[ -n "${pSailProject}" ] || envVarRead "Sail project" "pSailProject" "default:${default_pSailProject}|required|lower-case" ""
+[ -n "${pSailSubproject}" ] || envVarRead "Sail subproject" "pSailSubproject" "default:$(wsCoalesce "${default_pSailSubproject}" "$(basename "$(realpath "${BASE_DIR}")")")|required|lower-case" ""
 
-[ -n "${pNodejsVersion}" ] || envVarRead "NODEJS version" "pNodejsVersion" "default:22|required" ""
-[ -n "${pNodejsCodename}" ] || envVarRead "NODEJS codename" "pNodejsCodename" "default:bookworm|required|lower-case" ""
-[ -n "${pNodejsPort}" ] || envVarRead "NODEJS port" "pNodejsPort" "default:7100|required" ""
-[ -n "${pNodejsUserName}" ] || envVarRead "NODEJS user name" "pNodejsUserName" "default:node|required" ""
-[ -n "${pNodejsUserId}" ] || envVarRead "NODEJS user name" "pNodejsUserId" "default:$(id -u)|required" ""
+[ -n "${pNodejsVersion}" ] || envVarRead "NODEJS version" "pNodejsVersion" "default:$(wsCoalesce "${default_pNodejsVersion}" "22")|required" ""
+[ -n "${pNodejsCodename}" ] || envVarRead "NODEJS codename" "pNodejsCodename" "default:$(wsCoalesce "${default_pNodejsCodename}" "bookworm")|required|lower-case" ""
+[ -n "${pNodejsPort}" ] || envVarRead "NODEJS port" "pNodejsPort" "default:$(wsCoalesce "${default_pNodejsPort}" "7100")|required" ""
+[ -n "${pNodejsUserName}" ] || envVarRead "NODEJS user name" "pNodejsUserName" "default:$(wsCoalesce "${default_pNodejsUserName}" "node")|required" ""
+[ -n "${pNodejsUserId}" ] || envVarRead "NODEJS user name" "pNodejsUserId" "default:$(wsCoalesce "${default_pNodejsUserId}" "$(id -u)")|required" ""
 
 echo ""
 echo "---[ parameters ]---"
