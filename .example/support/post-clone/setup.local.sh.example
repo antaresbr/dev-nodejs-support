@@ -17,53 +17,53 @@ pclLoadDefaultAndSavedParams
 if [ -z "${pNodejsService}" ]
 then
   echo ""
-  envVarRead "NODEJS_SERVICE" "pNodejsService" "default:nodejs|required" ""
+  envVarRead "NODEJS_SERVICE" "pNodejsService" "default:$(wsCoalesce "${default_pNodejsService}" "nodejs")|required" ""
 fi
 
 if [ -z "${pNpmInstall}" ]
 then
   echo ""
-  envVarRead "NPM_INSTALL" "pNpmInstall" "default:npm install|required" ""
+  envVarRead "NPM_INSTALL" "pNpmInstall" "default:$(wsCoalesce "${default_pNpmInstall}" "npm install")|required" ""
 fi
 
 if [ -z "${pAppServiceName}" ]
 then
   echo ""
-  envVarRead "APP_SERVICE_NAME" "pAppServiceName" "default:app|required" ""
+  envVarRead "APP_SERVICE_NAME" "pAppServiceName" "default:$(wsCoalesce "${default_pAppServiceName}" "app")|required" ""
 fi
 
 if [ -z "${pAppServiceStart}" ]
 then
   echo ""
-  envVarRead "APP_SERVICE_START" "pAppServiceStart" "default:npm run start|required" ""
+  envVarRead "APP_SERVICE_START" "pAppServiceStart" "default:$(wsCoalesce "${default_pAppServiceStart}" "npm run start")|required" ""
 fi
 
 [ -z "${PC_IGNORE_CREATE_LINKS_TO_BASE_SCRIPTS}" ] || pLinksToBaseBaseScripts=no
 if [ -z "${pLinksToBaseBaseScripts}" ]
 then
   echo""
-  envVarRead "Create links to base scripts?" "pLinksToBaseBaseScripts" "default:yes|lower-case|hide-values" "y|yes|n|no"
+  envVarRead "Create links to base scripts?" "pLinksToBaseBaseScripts" "default:$(wsCoalesce "${default_pLinksToBaseBaseScripts}" "yes")|lower-case|hide-values" "y|yes|n|no"
 fi
 
 [ -z "${PC_IGNORE_GIT_REPO_EXAMPLE}" ] || pCopyGitRepoExample=no
 if [ -z "${pCopyGitRepoExample}" ]
 then
   echo""
-  envVarRead "Copy <.git-repo> example to parent project?" "pCopyGitRepoExample" "default:yes|lower-case|hide-values" "y|yes|n|no"
+  envVarRead "Copy <.git-repo> example to parent project?" "pCopyGitRepoExample" "default:$(wsCoalesce "${default_pCopyGitRepoExample}" "yes")|lower-case|hide-values" "y|yes|n|no"
 fi
 
 [ -z "${PC_IGNORE_POST_CLONE_EXAMPLE}" ] || pCopyPostCloneExample=no
 if [ -z "${pCopyPostCloneExample}" ]
 then
   echo""
-  envVarRead "Copy <post-clone> example to parent project?" "pCopyPostCloneExample" "default:yes|lower-case|hide-values" "y|yes|n|no"
+  envVarRead "Copy <post-clone> example to parent project?" "pCopyPostCloneExample" "default:$(wsCoalesce "${default_pCopyPostCloneExample}" "yes")|lower-case|hide-values" "y|yes|n|no"
 fi
 
 [ -z "${PC_IGNORE_SAIL_EXAMPLE}" ] || pCopySailExample=no
 if [ -z "${pCopySailExample}" ]
 then
   echo""
-  envVarRead "Copy <sail> example to parent project?" "pCopySailExample" "default:yes|lower-case|hide-values" "y|yes|n|no"
+  envVarRead "Copy <sail> example to parent project?" "pCopySailExample" "default:$(wsCoalesce "${default_pCopySailExample}" "yes")|lower-case|hide-values" "y|yes|n|no"
 fi
 
 echo ""
