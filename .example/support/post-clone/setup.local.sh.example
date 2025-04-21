@@ -140,7 +140,7 @@ function doLinksToBaseScripts() {
 function doCopyJsonExample() {
   local sourceDir="${BASE_DIR}/base/.example/app/src/.example"
   local targetDir="${BASE_DIR}/../src/.example/"
-  wsCertifyPath "$(realpath "${sourceDir}")"
+  wsCertifyPath "$(realpath "${targetDir}")"
   wsCopyFileIfNotExists "${sourceDir}/BUILD-INFO.json.example" "${targetDir}" "644"
   wsCopyFileIfNotExists "${sourceDir}/ENVIRONMENT.json.example" "${targetDir}" "644"
 }
