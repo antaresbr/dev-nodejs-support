@@ -16,7 +16,7 @@ services:
             - host.docker.internal:host-gateway
             - gateway.docker.internal:host-gateway
         ports:
-            - ${NODEJS_PORT}:8080
+            - ${NODEJS_PORT}:${APP_PORT}
         environment:
             SAIL_ENV: ${SAIL_ENV}
             SERVER_ENVIRONMENT: ${SERVER_ENVIRONMENT}

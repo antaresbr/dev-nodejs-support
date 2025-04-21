@@ -29,6 +29,8 @@ echo ""
 [ -n "${pNodejsUserName}" ] || envVarRead "NODEJS user name" "pNodejsUserName" "default:$(wsCoalesce "${default_pNodejsUserName}" "node")|required" ""
 [ -n "${pNodejsUserId}" ] || envVarRead "NODEJS user name" "pNodejsUserId" "default:$(wsCoalesce "${default_pNodejsUserId}" "$(id -u)")|required" ""
 
+[ -n "${pAppPort}" ] || envVarRead "APP internal port" "pAppPort" "default:$(wsCoalesce "${default_pAppPort}" "4200")|required" ""
+
 echo ""
 echo "---[ parameters ]---"
 echo ""
@@ -43,6 +45,8 @@ echo "pNodejsVersion       : ${pNodejsVersion}"
 echo "pNodejsPort          : ${pNodejsPort}"
 echo "pNodejsUserName      : ${pNodejsUserName}"
 echo "pNodejsUserId        : ${pNodejsUserId}"
+echo ""
+echo "pAppPort             : ${pAppPort}"
 echo ""
 
 [ -n "${pConfirm}" ] || envVarRead "Confirm parameters?" "pConfirm" "default:yes|lower-case|hide-values" "y|yes|n|no"
@@ -63,6 +67,7 @@ pNodejsCodename=\"${pNodejsCodename}\"
 pNodejsPort=\"${pNodejsPort}\"
 pNodejsUserName=\"${pNodejsUserName}\"
 pNodejsUserId=\"${pNodejsUserId}\"
+pAppPort=\"${pAppPort}\"
 " > "${SCRIPT_DIR}/setup.local.env"
   fi
 fi
@@ -75,6 +80,7 @@ NODEJS_CODENAME=${pNodejsCodename}
 NODEJS_PORT=${pNodejsPort}
 NODEJS_USERNAME=${pNodejsUserName}
 NODEJS_USERID=${pNodejsUserId}
+APP_PORT=${pAppPort}
 "
 
 #-- sail
